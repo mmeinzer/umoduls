@@ -2,15 +2,29 @@
 <html lang="en">
 
 <head>
-  <title></title>
   <meta charset="utf-8" />
+  <title>μModūls</title>
+  {% load staticfiles %}
+  <link rel="stylesheet" href="{% static 'css/materialize.css' %}">
 </head>
 
 <body class="body">
-  <div>
+  <header>
+    <nav>
+      <div class="nav-wrapper">
+        <a href="#" class="brand-logo right">μModūls</a>
+        <ul id="nav-mobile" class="left hide-on-med-and-down">
+          <li><a href="#">Store</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Forum</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <main>
     {% block content %}
     {% endblock %}
-  </div>
+  </main>
 </body>
 
 </html>
