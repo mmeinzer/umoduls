@@ -6,21 +6,32 @@
   <title>μModūls</title>
   {% load staticfiles %}
   <link rel="stylesheet" href="{% static 'css/materialize.css' %}">
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
 </head>
 
-<body class="body">
+<body>
   <header>
     <nav>
-      <div class="nav-wrapper">
-        <a href="#" class="brand-logo right">μModūls</a>
-        <ul id="nav-mobile" class="left hide-on-med-and-down">
-          <li><a href="#">Store</a></li>
-          <li><a href="#">Blog</a></li>
-          <li><a href="#">Forum</a></li>
-        </ul>
+      <div class="nav-wrapper row grey">
+        <div class="col s10">
+          <ul id="nav-mobile" class="left hide-on-med-and-down">
+            <li><a href="#">Store</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Forum</a></li>
+          </ul>
+        </div>
+        <div class="col s2">
+          <div class="valign-wrapper">
+          <div class="valign">
+          <a href="#" id="logo-container" class="brand-logo valign">μModūls <img id="logo-img" src="{% static 'logo.png' %}"></a>
+          </div>
+          </div>
+        </div>
       </div>
     </nav>
   </header>
+
   <main>
     {% block content %}
     {% endblock %}
