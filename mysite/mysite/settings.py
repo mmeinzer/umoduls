@@ -9,6 +9,9 @@ https://docs.djangoproject.com/en/1.9/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
+# Custom settings
+SITE_NAME = 'μModūls'
+# End custom settings
 
 import os
 
@@ -29,6 +32,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+# Import machina apps getter
+from machina import get_apps as get_machina_apps
 INSTALLED_APPS = [
     'blog',
     'django.contrib.admin',
@@ -37,7 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
+
+    # Machina (forum)
+    'mptt',
+    'haystack',
+    'widget_tweaks',
+    'django_markdown'
+] + get_machina_apps()
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -48,14 +59,20 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Machina
+    'machina.apps.forum_permission.middleware.ForumPermissionMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
 
+# Machina
+from machina import MACHINA_MAIN_TEMPLATE_DIR
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            MACHINA_MAIN_TEMPLATE_DIR,
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -63,6 +80,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # Machina
+                'machina.core.context_processors.metadata',
             ],
         },
     },
@@ -118,4 +137,36 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
+from machina import MACHINA_MAIN_STATIC_DIR
+STATICFILES_DIRS = [
+  MACHINA_MAIN_STATIC_DIR,
+]
+
 STATIC_URL = '/static/'
+
+CACHES = {
+  'default': {
+    'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+  },
+  'machina_attachments': {
+    'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+    'LOCATION': '/tmp',
+  }
+}
+
+# Search implementation for Machina (look for other backends eg. Whoosh)
+# HAYSTACK_CONNECTIONS = {
+#   'default': {
+#     'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+#     'PATH': os.path.join(PROJECT_PATH, 'whoosh_index'),
+#   },
+# }
+
+HAYSTACK_CONNECTIONS = {
+  'default': {
+    'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+  },
+}
+
+# Machina local settings
+MACHINA_FORUM_NAME = SITE_NAME + ' Forum'

@@ -15,8 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from machina.app import board
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('blog.urls')),
+    url(r'^markdown/', include( 'django_markdown.urls')),
+    url(r'^forum/', include(board.urls)),
+    #url(r'^', include('blog.urls')),
 ]
+
+from django.conf import settings
+
+if settings.DEBUG:
+  urlpatterns.append(url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}))
+
+urlpatterns.append(url(r'^', include('blog.urls')))
